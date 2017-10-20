@@ -25,6 +25,7 @@ sys_exit(void)
 int
 sys_wait(void)
 {
+<<<<<<< HEAD
   int size = 4;
   int val;
   int* value = &val;
@@ -49,6 +50,9 @@ sys-waitpid(void)
 	argptr(2, (char**) &opts, 4);
 
 	return waitpid(pid, status, opts);
+=======
+  return wait(0);
+>>>>>>> bd91a10b6061fe5a06d7e1a0159531a5f36eaf8f
 }
 
 int
