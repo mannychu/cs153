@@ -37,7 +37,7 @@ sys_wait(void)
 }
 
 int
-sys-waitpid(void)
+sys_waitpid(void)
 {
 	int pid;
 	argptr(0,(char**) &pid, 4);

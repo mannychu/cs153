@@ -72,7 +72,7 @@ fork1(void)
       5a:	85 c0                	test   %eax,%eax
       5c:	0f 84 9d 00 00 00    	je     ff <main+0xff>
       runcmd(parsecmd(buf));
-    wait();
+    wait(0);
       62:	e8 f3 0c 00 00       	call   d5a <wait>
       break;
     }
@@ -152,7 +152,7 @@ fork1(void)
     }
     if(fork1() == 0)
       runcmd(parsecmd(buf));
-    wait();
+    wait(0);
   }
   exit(0);
       f5:	83 ec 0c             	sub    $0xc,%esp
@@ -345,9 +345,9 @@ fork1(void)
      20e:	58                   	pop    %eax
      20f:	ff 75 f4             	pushl  -0xc(%ebp)
      212:	e8 63 0b 00 00       	call   d7a <close>
-    wait();
+    wait(0);
      217:	e8 3e 0b 00 00       	call   d5a <wait>
-    wait();
+    wait(0);
      21c:	e8 39 0b 00 00       	call   d5a <wait>
     break;
      221:	83 c4 10             	add    $0x10,%esp
@@ -370,7 +370,7 @@ fork1(void)
   if(pid == -1)
      233:	83 f8 ff             	cmp    $0xffffffff,%eax
      236:	0f 84 85 00 00 00    	je     2c1 <runcmd+0x121>
-    wait();
+    wait(0);
     break;
 
   case BACK:
@@ -449,7 +449,7 @@ fork1(void)
      2a0:	85 c0                	test   %eax,%eax
      2a2:	74 e7                	je     28b <runcmd+0xeb>
       runcmd(lcmd->left);
-    wait();
+    wait(0);
      2a4:	e8 b1 0a 00 00       	call   d5a <wait>
     runcmd(lcmd->right);
      2a9:	83 ec 0c             	sub    $0xc,%esp
