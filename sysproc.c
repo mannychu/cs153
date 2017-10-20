@@ -25,7 +25,30 @@ sys_exit(void)
 int
 sys_wait(void)
 {
-  return wait();
+  int size = 4;
+  int val;
+  int* value = &val;
+
+  if(argptr(0, (char**) value, size) < 0)
+  { return -1; }
+
+  int* status = (int*)(&value);
+  return wait(status);
+}
+
+int
+sys-waitpid(void)
+{
+	int pid;
+	argptr(0,(char**) &pid, 4);
+
+	int *status;
+	argptr(1,(char**) &status, 4);
+
+	int opts;
+	argptr(2, (char**) &opts, 4);
+
+	return waitpid(pid, status, opts);
 }
 
 int

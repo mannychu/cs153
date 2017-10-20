@@ -273,7 +273,7 @@ exit(int status)
 // Wait for a child process to exit and return its pid.
 // Return -1 if this process has no children.
 int
-wait(void)
+wait(int * status)
 {
   struct proc *p;
   int havekids, pid;
@@ -314,6 +314,65 @@ wait(void)
   }
 }
 
+
+int
+waitpid(int pid, int * status, int opts)
+{
+	struct proc *p;
+	int waitProc;
+
+	acquire(&ptable.lock);
+	for(;;)
+	{
+		waitProc=0;
+		for(p=ptable.proc; p < &ptable.proc[NPROC]; p++)
+		{
+			if(p->pid != pid)
+			{ continue; }
+			
+			waitProc=1;
+
+			if(p->wcount < sizeof(p->wpid))
+			{
+				p->wpid[p->wcount] = proc;
+				p->wcount++;
+			}
+
+			if(p->state == ZOMBIE)
+			{
+				pid = p->pid;
+				kfree(p->kstack);
+				p->kstack = 0;
+				freevm(p->pgdir);
+				p->state = UNUSED;
+				p->pid = 0;
+				p->parent = 0;
+				p->name[0] = 0;
+				p->killed = 0;
+				release(&ptable.lock);
+				return pid;
+			}
+		}
+
+		if(!waitProc)
+		{
+			release(&ptable.lock);
+			return -1;
+		}
+
+		if(proc->killed)
+		{
+			release(&ptable.lock);
+			return -1;
+		}
+
+		sleep(proc, &ptable.lock);
+
+	}
+}
+
+
+}
 //PAGEBREAK: 42
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
