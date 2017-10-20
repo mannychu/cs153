@@ -1,4 +1,7 @@
 // Per-CPU state
+
+int waitpid(int pid, int * status, int options);
+
 struct cpu {
   uchar apicid;                // Local APIC ID
   struct context *scheduler;   // swtch() here to enter scheduler

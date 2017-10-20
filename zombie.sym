@@ -14,7 +14,7 @@
 00000000 ulib.c
 00000000 printf.c
 00000330 printint
-000006f8 digits.1107
+000006f8 digits.1111
 00000000 umalloc.c
 00000990 freep
 00000994 base

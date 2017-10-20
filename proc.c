@@ -334,7 +334,7 @@ waitpid(int pid, int * status, int opts)
 
 			if(p->wcount < sizeof(p->wpid))
 			{
-				p->wpid[p->wcount] = proc;
+				p->wpid[p->wcount] = ptable.proc;
 				p->wcount++;
 			}
 
@@ -360,19 +360,19 @@ waitpid(int pid, int * status, int opts)
 			return -1;
 		}
 
-		if(proc->killed)
+		if(ptable.proc->killed)
 		{
 			release(&ptable.lock);
 			return -1;
 		}
 
-		sleep(proc, &ptable.lock);
+  		sleep(ptable.proc, &ptable.lock);
 
 	}
 }
 
 
-}
+
 //PAGEBREAK: 42
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
