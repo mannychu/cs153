@@ -121,7 +121,7 @@ printf(int fd, char *s, ...)
   9a:	85 db                	test   %ebx,%ebx
   9c:	74 10                	je     ae <forktest+0x5e>
   9e:	66 90                	xchg   %ax,%ax
-    if(wait() < 0){
+    if(wait(0) < 0){
   a0:	e8 15 03 00 00       	call   3ba <wait>
   a5:	85 c0                	test   %eax,%eax
   a7:	78 6a                	js     113 <forktest+0xc3>
@@ -138,7 +138,7 @@ printf(int fd, char *s, ...)
     }
   }
 
-  if(wait() != -1){
+  if(wait(0) != -1){
   ae:	e8 07 03 00 00       	call   3ba <wait>
   b3:	83 f8 ff             	cmp    $0xffffffff,%eax
   b6:	0f 85 80 00 00 00    	jne    13c <forktest+0xec>
@@ -214,7 +214,7 @@ printf(int fd, char *s, ...)
   }
 
   for(; n > 0; n--){
-    if(wait() < 0){
+    if(wait(0) < 0){
       printf(1, "wait stopped early\n");
       exit(0);
  130:	c7 04 24 00 00 00 00 	movl   $0x0,(%esp)
@@ -236,7 +236,7 @@ printf(int fd, char *s, ...)
     }
   }
 
-  if(wait() != -1){
+  if(wait(0) != -1){
     printf(1, "wait got too many\n");
     exit(1);
  159:	c7 04 24 01 00 00 00 	movl   $0x1,(%esp)

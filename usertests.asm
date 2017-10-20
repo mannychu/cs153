@@ -326,7 +326,7 @@ exitiputtest(void)
      2a6:	8d 76 00             	lea    0x0(%esi),%esi
      2a9:	8d bc 27 00 00 00 00 	lea    0x0(%edi,%eiz,1),%edi
   }
-  wait();
+  wait(0);
      2b0:	e8 e5 3a 00 00       	call   3d9a <wait>
   printf(stdout, "exitiput test ok\n");
      2b5:	83 ec 08             	sub    $0x8,%esp
@@ -464,7 +464,7 @@ openiputtest(void)
     printf(stdout, "unlink failed\n");
     exit(1);
   }
-  wait();
+  wait(0);
      3e5:	e8 b0 39 00 00       	call   3d9a <wait>
   printf(stdout, "openiput test ok\n");
      3ea:	83 ec 08             	sub    $0x8,%esp
@@ -1641,7 +1641,7 @@ pipe1(void)
      c3e:	83 ec 0c             	sub    $0xc,%esp
      c41:	ff 75 e0             	pushl  -0x20(%ebp)
      c44:	e8 71 31 00 00       	call   3dba <close>
-    wait();
+    wait(0);
      c49:	e8 4c 31 00 00       	call   3d9a <wait>
   } else {
     printf(1, "fork() failed\n");
@@ -1685,7 +1685,7 @@ pipe1(void)
       exit(1);
     }
     close(fds[0]);
-    wait();
+    wait(0);
   } else {
     printf(1, "fork() failed\n");
      c9d:	83 ec 08             	sub    $0x8,%esp
@@ -1828,9 +1828,9 @@ preempt(void)
     return;
      daa:	83 c4 10             	add    $0x10,%esp
   printf(1, "wait... ");
-  wait();
-  wait();
-  wait();
+  wait(0);
+  wait(0);
+  wait(0);
   printf(1, "preempt ok\n");
 }
      dad:	8d 65 f4             	lea    -0xc(%ebp),%esp
@@ -1869,11 +1869,11 @@ preempt(void)
      de8:	68 ce 45 00 00       	push   $0x45ce
      ded:	6a 01                	push   $0x1
      def:	e8 ec 30 00 00       	call   3ee0 <printf>
-  wait();
+  wait(0);
      df4:	e8 a1 2f 00 00       	call   3d9a <wait>
-  wait();
+  wait(0);
      df9:	e8 9c 2f 00 00       	call   3d9a <wait>
-  wait();
+  wait(0);
      dfe:	e8 97 2f 00 00       	call   3d9a <wait>
   printf(1, "preempt ok\n");
      e03:	5e                   	pop    %esi
@@ -1907,7 +1907,7 @@ exitwait(void)
     }
     if(pid){
      e30:	74 6f                	je     ea1 <exitwait+0x81>
-      if(wait() != pid){
+      if(wait(0) != pid){
      e32:	e8 63 2f 00 00       	call   3d9a <wait>
      e37:	39 c3                	cmp    %eax,%ebx
      e39:	75 2d                	jne    e68 <exitwait+0x48>
@@ -1955,7 +1955,7 @@ exitwait(void)
       return;
     }
     if(pid){
-      if(wait() != pid){
+      if(wait(0) != pid){
         printf(1, "wait wrong pid\n");
      e68:	83 ec 08             	sub    $0x8,%esp
      e6b:	68 e3 45 00 00       	push   $0x45e3
@@ -1992,7 +1992,7 @@ exitwait(void)
      e9e:	5e                   	pop    %esi
      e9f:	5d                   	pop    %ebp
      ea0:	c3                   	ret    
-      if(wait() != pid){
+      if(wait(0) != pid){
         printf(1, "wait wrong pid\n");
         return;
       }
@@ -2107,7 +2107,7 @@ mem(void)
      f4b:	90                   	nop
      f4c:	8d 74 26 00          	lea    0x0(%esi,%eiz,1),%esi
   } else {
-    wait();
+    wait(0);
   }
 }
      f50:	8d 65 f4             	lea    -0xc(%ebp),%esp
@@ -2120,7 +2120,7 @@ mem(void)
     printf(1, "mem ok\n");
     exit(0);
   } else {
-    wait();
+    wait(0);
      f57:	e9 3e 2e 00 00       	jmp    3d9a <wait>
      f5c:	8d 74 26 00          	lea    0x0(%esi,%eiz,1),%esi
       free(m1);
@@ -2240,7 +2240,7 @@ sharedfd(void)
     1030:	0f 84 f4 00 00 00    	je     112a <sharedfd+0x19a>
     exit(0);
   else
-    wait();
+    wait(0);
     1036:	e8 5f 2d 00 00       	call   3d9a <wait>
   close(fd);
     103b:	83 ec 0c             	sub    $0xc,%esp
@@ -2261,7 +2261,7 @@ sharedfd(void)
   if(pid == 0)
     exit(0);
   else
-    wait();
+    wait(0);
   close(fd);
   fd = open("sharedfd", 0);
     105e:	89 45 d0             	mov    %eax,-0x30(%ebp)
@@ -2372,7 +2372,7 @@ sharedfd(void)
     110e:	5d                   	pop    %ebp
     110f:	c3                   	ret    
   else
-    wait();
+    wait(0);
   close(fd);
   fd = open("sharedfd", 0);
   if(fd < 0){
@@ -2506,7 +2506,7 @@ fourfiles(void)
   }
 
   for(pi = 0; pi < 4; pi++){
-    wait();
+    wait(0);
     11b8:	e8 dd 2b 00 00       	call   3d9a <wait>
     11bd:	bf 30 00 00 00       	mov    $0x30,%edi
     11c2:	e8 d3 2b 00 00       	call   3d9a <wait>
@@ -2521,7 +2521,7 @@ fourfiles(void)
     11d8:	83 ec 08             	sub    $0x8,%esp
     total = 0;
     11db:	31 db                	xor    %ebx,%ebx
-    wait();
+    wait(0);
   }
 
   for(i = 0; i < 2; i++){
@@ -2533,7 +2533,7 @@ fourfiles(void)
     total = 0;
     while((n = read(fd, buf, sizeof(buf))) > 0){
     11e7:	83 c4 10             	add    $0x10,%esp
-    wait();
+    wait(0);
   }
 
   for(i = 0; i < 2; i++){
@@ -2594,7 +2594,7 @@ fourfiles(void)
     1247:	e8 96 2b 00 00       	call   3de2 <unlink>
 
   for(pi = 0; pi < 4; pi++){
-    wait();
+    wait(0);
   }
 
   for(i = 0; i < 2; i++){
@@ -2813,7 +2813,7 @@ createdelete(void)
     13a3:	75 e5                	jne    138a <createdelete+0x1a>
     13a5:	8d 7d c8             	lea    -0x38(%ebp),%edi
   for(pi = 0; pi < 4; pi++){
-    wait();
+    wait(0);
   }
 
   name[0] = name[1] = name[2] = 0;
@@ -2824,7 +2824,7 @@ createdelete(void)
   }
 
   for(pi = 0; pi < 4; pi++){
-    wait();
+    wait(0);
     13aa:	e8 eb 29 00 00       	call   3d9a <wait>
     13af:	e8 e6 29 00 00       	call   3d9a <wait>
     13b4:	e8 e1 29 00 00       	call   3d9a <wait>
@@ -2911,7 +2911,7 @@ createdelete(void)
     1426:	e8 8f 29 00 00       	call   3dba <close>
     142b:	83 c4 10             	add    $0x10,%esp
     142e:	83 c3 01             	add    $0x1,%ebx
-    wait();
+    wait(0);
   }
 
   name[0] = name[1] = name[2] = 0;
@@ -2920,7 +2920,7 @@ createdelete(void)
     1431:	80 fb 74             	cmp    $0x74,%bl
     1434:	75 b3                	jne    13e9 <createdelete+0x79>
   for(pi = 0; pi < 4; pi++){
-    wait();
+    wait(0);
   }
 
   name[0] = name[1] = name[2] = 0;
@@ -3804,7 +3804,7 @@ concreate(void)
     if(pid == 0)
       exit(0);
     else
-      wait();
+      wait(0);
     1a1f:	e8 76 23 00 00       	call   3d9a <wait>
   } de;
 
@@ -3925,7 +3925,7 @@ concreate(void)
     if(pid == 0)
       exit(0);
     else
-      wait();
+      wait(0);
     1ad4:	e8 c1 22 00 00       	call   3d9a <wait>
   } de;
 
@@ -3938,7 +3938,7 @@ concreate(void)
     1ae2:	8d b6 00 00 00 00    	lea    0x0(%esi),%esi
       exit(0);
     else
-      wait();
+      wait(0);
   }
 
   memset(fa, 0, sizeof(fa));
@@ -3959,7 +3959,7 @@ concreate(void)
   while(read(fd, &de, sizeof(de)) > 0){
     1b09:	83 c4 10             	add    $0x10,%esp
     else
-      wait();
+      wait(0);
   }
 
   memset(fa, 0, sizeof(fa));
@@ -4081,7 +4081,7 @@ concreate(void)
     if(pid == 0)
       exit(0);
     else
-      wait();
+      wait(0);
     1be8:	e8 ad 21 00 00       	call   3d9a <wait>
   if(n != 40){
     printf(1, "concreate not enough files in directory listing\n");
@@ -4147,7 +4147,7 @@ concreate(void)
     1c4e:	eb 8d                	jmp    1bdd <concreate+0x22d>
       exit(0);
     else
-      wait();
+      wait(0);
   }
 
   printf(1, "concreate ok\n");
@@ -4348,7 +4348,7 @@ linkunlink()
     1d97:	8b 45 e4             	mov    -0x1c(%ebp),%eax
     1d9a:	85 c0                	test   %eax,%eax
     1d9c:	74 57                	je     1df5 <linkunlink+0x105>
-    wait();
+    wait(0);
     1d9e:	e8 f7 1f 00 00       	call   3d9a <wait>
   else
     exit(0);
@@ -4394,7 +4394,7 @@ linkunlink()
   }
 
   if(pid)
-    wait();
+    wait(0);
   else
     exit(0);
     1df5:	83 ec 0c             	sub    $0xc,%esp
@@ -6979,7 +6979,7 @@ forktest(void)
     30d6:	85 db                	test   %ebx,%ebx
     30d8:	74 14                	je     30ee <forktest+0x4e>
     30da:	8d b6 00 00 00 00    	lea    0x0(%esi),%esi
-    if(wait() < 0){
+    if(wait(0) < 0){
     30e0:	e8 b5 0c 00 00       	call   3d9a <wait>
     30e5:	85 c0                	test   %eax,%eax
     30e7:	78 4c                	js     3135 <forktest+0x95>
@@ -6996,7 +6996,7 @@ forktest(void)
     }
   }
 
-  if(wait() != -1){
+  if(wait(0) != -1){
     30ee:	e8 a7 0c 00 00       	call   3d9a <wait>
     30f3:	83 f8 ff             	cmp    $0xffffffff,%eax
     30f6:	75 58                	jne    3150 <forktest+0xb0>
@@ -7040,7 +7040,7 @@ forktest(void)
   }
 
   for(; n > 0; n--){
-    if(wait() < 0){
+    if(wait(0) < 0){
       printf(1, "wait stopped early\n");
     3135:	83 ec 08             	sub    $0x8,%esp
     3138:	68 bb 4f 00 00       	push   $0x4fbb
@@ -7052,7 +7052,7 @@ forktest(void)
     }
   }
 
-  if(wait() != -1){
+  if(wait(0) != -1){
     printf(1, "wait got too many\n");
     3150:	83 ec 08             	sub    $0x8,%esp
     3153:	68 cf 4f 00 00       	push   $0x4fcf
@@ -7202,7 +7202,7 @@ sbrktest(void)
     3209:	85 ff                	test   %edi,%edi
     320b:	0f 84 92 03 00 00    	je     35a3 <sbrktest+0x433>
     exit(0);
-  wait();
+  wait(0);
     3211:	e8 84 0b 00 00       	call   3d9a <wait>
 
   // can one grow address space to something big?
@@ -7366,7 +7366,7 @@ sbrktest(void)
       kill(ppid);
       exit(1);
     }
-    wait();
+    wait(0);
     3328:	e8 6d 0a 00 00       	call   3d9a <wait>
     printf(stdout, "sbrk downsize failed, a %x c %x\n", a, c);
     exit(1);
@@ -7376,7 +7376,7 @@ sbrktest(void)
   for(a = (char*)(KERNBASE); a < (char*) (KERNBASE+2000000); a += 50000){
     332d:	81 fb 80 84 1e 80    	cmp    $0x801e8480,%ebx
     3333:	75 d3                	jne    3308 <sbrktest+0x198>
-    wait();
+    wait(0);
   }
 
   // if we run the system out of memory, does it clean up the last
@@ -7447,7 +7447,7 @@ sbrktest(void)
     339c:	83 ec 0c             	sub    $0xc,%esp
     339f:	50                   	push   %eax
     33a0:	e8 1d 0a 00 00       	call   3dc2 <kill>
-    wait();
+    wait(0);
     33a5:	e8 f0 09 00 00       	call   3d9a <wait>
     33aa:	83 c4 10             	add    $0x10,%esp
     33ad:	83 c3 04             	add    $0x4,%ebx
@@ -7462,7 +7462,7 @@ sbrktest(void)
     if(pids[i] == -1)
       continue;
     kill(pids[i]);
-    wait();
+    wait(0);
   }
   if(c == (char*)0xffffffff){
     33b4:	83 fe ff             	cmp    $0xffffffff,%esi
@@ -7547,7 +7547,7 @@ sbrktest(void)
     3465:	e8 28 09 00 00       	call   3d92 <exit>
       continue;
     kill(pids[i]);
-    wait();
+    wait(0);
   }
   if(c == (char*)0xffffffff){
     printf(stdout, "failed sbrk leaked memory\n");
@@ -7791,7 +7791,7 @@ validatetest(void)
     kill(pid);
     3641:	89 34 24             	mov    %esi,(%esp)
     3644:	e8 79 07 00 00       	call   3dc2 <kill>
-    wait();
+    wait(0);
     3649:	e8 4c 07 00 00       	call   3d9a <wait>
 
     // try to crash the kernel by passing in a bad string pointer
@@ -7840,7 +7840,7 @@ validatetest(void)
     3691:	6a 00                	push   $0x0
     3693:	e8 fa 06 00 00       	call   3d92 <exit>
     kill(pid);
-    wait();
+    wait(0);
 
     // try to crash the kernel by passing in a bad string pointer
     if(link("nosuchfile", (char*)p) != -1){
@@ -7951,7 +7951,7 @@ bigargtest(void)
     printf(stdout, "bigargtest: fork failed\n");
     exit(1);
   }
-  wait();
+  wait(0);
     3762:	e8 33 06 00 00       	call   3d9a <wait>
   fd = open("bigarg-ok", 0);
     3767:	83 ec 08             	sub    $0x8,%esp
@@ -8036,7 +8036,7 @@ bigargtest(void)
     380f:	e8 7e 05 00 00       	call   3d92 <exit>
     exit(1);
   }
-  wait();
+  wait(0);
   fd = open("bigarg-ok", 0);
   if(fd < 0){
     printf(stdout, "bigarg test failed!\n");
@@ -8497,7 +8497,7 @@ uio()
     printf (1, "fork failed\n");
     exit(1);
   }
-  wait();
+  wait(0);
     3a60:	e8 35 03 00 00       	call   3d9a <wait>
   printf(1, "uio test done\n");
     3a65:	83 ec 08             	sub    $0x8,%esp
@@ -8543,7 +8543,7 @@ uio()
     3abe:	66 90                	xchg   %ax,%ax
 
 00003ac0 <argptest>:
-  wait();
+  wait(0);
   printf(1, "uio test done\n");
 }
 
