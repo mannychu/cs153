@@ -371,6 +371,52 @@ waitpid(int pid, int * status, int opts)
 	}
 }
 
+struct proc * currproc(void)
+{
+    struct proc * p;    //Currently working process
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+    {
+      if(p->state == RUNNING) return p;
+      
+    }
+    return p;
+}
+
+int high_priority(void)
+{
+	int priority_uno = 0;
+	struct proc * p;
+	
+	for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+	{
+		if(p->state != RUNNABLE)
+		   continue;
+		if(p->priority > priority_uno)
+	           priority_uno = p->priority;
+	}
+	return priority_uno;
+}
+
+
+int
+change_priority(int priority)
+{
+	struct proc * p;
+	p = currproc();
+	// acquire lock
+	acquire(&ptable.lock);
+	//set new priority
+	p->priority = priority;
+	//set state to runnable (i.e. ready)
+	p->state = RUNNABLE;
+
+	//release lock
+	release(&ptable.lock);
+
+	//yield control for top priority 
+	yield();
+	return priority;
+}
 
 
 //PAGEBREAK: 42
@@ -386,17 +432,22 @@ scheduler(void)
 {
   struct proc *p;
   struct cpu *c = mycpu();
-  c->proc = 0;
+  int priority_uno = 0;
   
   for(;;){
     // Enable interrupts on this processor.
     sti();
+
+    priority_uno = high_priority();
 
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE)
         continue;
+
+      if(priority_uno > p->priority)
+	continue;
 
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
