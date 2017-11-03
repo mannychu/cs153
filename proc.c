@@ -269,11 +269,10 @@ exit(int status)
   panic("zombie exit");
 }
 
-
 // Wait for a child process to exit and return its pid.
 // Return -1 if this process has no children.
 int
-wait(int * status)
+wait(int * status) // CS153 EDITED CODE
 {
   struct proc *p;
   int havekids, pid;
@@ -315,6 +314,7 @@ wait(int * status)
 }
 
 
+// CS153 EDITED CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 int
 waitpid(int pid, int * status, int opts)
 {
@@ -397,7 +397,7 @@ int high_priority(void)
 	return priority_uno;
 }
 
-
+// CS153 EDITED CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 int
 change_priority(int priority)
 {
