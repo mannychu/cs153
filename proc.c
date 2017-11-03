@@ -315,24 +315,26 @@ wait(int * status) // CS153 EDITED CODE
 
 
 // CS153 EDITED CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// waitpid takes in pid number to kill, its status, and options 
+// with what to do with the collected resources
+
 int
 waitpid(int pid, int * status, int opts)
 {
   struct proc *p;
-  int p_found;
+  int foundPID; // flag to set if specific child is found
 
-  acquire(&ptable.lock);
+  acquire(&ptable.lock); // acquire the CPU, #atomic
   for(;;){
     // Scan through table looking for zombie children.
-    p_found = 0;
-    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+    foundPID = 0; // initialize to not found
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) // iterate through the process table
     {
-      if(p->pid != pid)
+      if(p->pid != pid) // if the current pid is not the one, iterate to next
         continue;
-      p_found = 1;
-      if(p->state == ZOMBIE){
-        // Found one.
-        pid = p->pid;
+      foundPID = 1;	// if the current pid is the one, set flag to found
+      if(p->state == ZOMBIE){ // the current state of pid is ZOMBIE
+        pid = p->pid;	// set all of child process data
         kfree(p->kstack);
         p->kstack = 0;
         freevm(p->pgdir);
@@ -343,8 +345,8 @@ waitpid(int pid, int * status, int opts)
         p->killed = 0;
         //if(status)
         //  *status=p->exitstatus;
-        release(&ptable.lock);
-        return pid;
+        release(&ptable.lock); // release before returning
+        return pid; // return the found pid number, now dead
       }
      // else
      // {
@@ -354,17 +356,20 @@ waitpid(int pid, int * status, int opts)
      // }
     }
 
-    // No point waiting if we don't have process.
-    if(!p_found){
-      release(&ptable.lock);
-      return -1;
+    // nothing to check here
+    if(!foundPID){ // no set flag
+      release(&ptable.lock); // release lock
+      if (status) {
+	*status = -1;
+      }
+      return -1; // failed
     }
-    // No point waiting if we don't have process.
-    if(p->killed){
-      release(&ptable.lock);
-      return -1;
+
+    // nothing to check here
+    if(p->killed){ // pid has been killed
+      release(&ptable.lock); // release lock
+      return -1; // failed
     }
-    // Wait for children to exit.  (See wakeup1 call in proc_exit.)
 
     sleep(p, &ptable.lock);  //DOC: wait-sleep
   }
