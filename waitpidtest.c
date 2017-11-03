@@ -18,7 +18,7 @@ int main(int argc, char ** argv){
         for(i = 0; i < 15 && pid > 0; i++){
             pid = fork();
             if(pid < 0)
-                printf(1,"errors occur!\n");
+                printf(1,"FORK ERROR!\n");
         }
         if (pid == 0){
             int j = 0;
@@ -27,12 +27,12 @@ int main(int argc, char ** argv){
             
             printf(1,"pid = %d\n",getpid());
             if(getpid() == begin+10){
-                printf(1,"pid %d waiting for %d\n",begin+10,begin+5);
+                printf(1,"PID %d is currently waiting for PID %d\n",begin+10,begin+5);
                 int wpid = waitpid(begin+5,&status,0);
-                printf(1,"success clean %d\n",wpid);
+                printf(1,"Everything is good! %d\n",wpid);
             }
             if(getpid() == begin+12){
-                printf(1,"pid %d waiting for %d\n",begin+12,begin+5);
+                printf(1,"PID %d is currently waiting for PID %d\n",begin+12,begin+5);
                 int wpid = waitpid(begin+5,&status,0);
                 if(wpid == -1)
                     printf(1,"no more waiting for %d\n",begin+5);
@@ -41,7 +41,8 @@ int main(int argc, char ** argv){
                 exit(5);
             exit(0);
         }
-    }else if(pid == 0){
+    }
+    else if(pid == 0){
         int j = 0;
         while(j++ < 1000);
         exit(0);
@@ -49,8 +50,10 @@ int main(int argc, char ** argv){
     int going = 1;
     while(going >= 0){
         going = wait(&status);
-        printf(1,"kill %d process\n",going);
+        printf(1,"Killing  PID process %d\n",going);
     };
     exit(0);
     return 0;
 }
+
+

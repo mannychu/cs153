@@ -35,19 +35,21 @@ sys_wait(void)
   return wait(status);
 }
 
+//CS153 Edited Code~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 int
-sys_waitpid(void)
+sys_waitpid()
 {
 	int pid;
-	argptr(0,(char**) &pid, 4);
-
 	int *status;
-	argptr(1,(char**) &status, 4);
-
 	int opts;
+	
+	argint(0,&pid);
+	argptr(0,(char**) &pid, 4);
+	argptr(1,(char**) &status, 4);
 	argptr(2, (char**) &opts, 4);
 
 	return waitpid(pid, status, opts);
+	return 0; //should never reach this point
 }
 
 int

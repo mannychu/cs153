@@ -118,6 +118,8 @@ void            setproc(struct proc*);
 void            sleep(void*, struct spinlock*);
 void            userinit(void);
 int             wait(int *);
+//CS153 Edited Code~~~~~~~~~~~~~~~~~~~~~~~~~~~
+int		waitpid(int, int *, int); 
 void            wakeup(void*);
 void            yield(void);
 int		change_priority(int);
