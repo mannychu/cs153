@@ -318,57 +318,57 @@ wait(int * status) // CS153 EDITED CODE
 int
 waitpid(int pid, int * status, int opts)
 {
-	struct proc *p;
-	int waitProc;
+  struct proc *p;
+  int p_found;
 
-	acquire(&ptable.lock);
-	for(;;)
-	{
-		waitProc=0;
-		for(p=ptable.proc; p < &ptable.proc[NPROC]; p++)
-		{
-			if(p->pid != pid)
-			{ continue; }
-			
-			waitProc=1;
+  acquire(&ptable.lock);
+  for(;;){
+    // Scan through table looking for zombie children.
+    p_found = 0;
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+    {
+      if(p->pid != pid)
+        continue;
+      p_found = 1;
+      if(p->state == ZOMBIE){
+        // Found one.
+        pid = p->pid;
+        kfree(p->kstack);
+        p->kstack = 0;
+        freevm(p->pgdir);
+        p->state = UNUSED;
+        p->pid = 0;
+        p->parent = 0;
+        p->name[0] = 0;
+        p->killed = 0;
+        //if(status)
+        //  *status=p->exitstatus;
+        release(&ptable.lock);
+        return pid;
+      }
+     // else
+     // {
+     //   p->waitpid_parent[p->waitpid_parentindex]=proc->pid;
+     //   p->waitpid_parentindex++;
+     //   break;
+     // }
+    }
 
-			if(p->wcount < sizeof(p->wpid))
-			{
-				p->wpid[p->wcount] = ptable.proc;
-				p->wcount++;
-			}
+    // No point waiting if we don't have process.
+    if(!p_found){
+      release(&ptable.lock);
+      return -1;
+    }
+    // No point waiting if we don't have process.
+    if(p->killed){
+      release(&ptable.lock);
+      return -1;
+    }
+    // Wait for children to exit.  (See wakeup1 call in proc_exit.)
 
-			if(p->state == ZOMBIE)
-			{
-				pid = p->pid;
-				kfree(p->kstack);
-				p->kstack = 0;
-				freevm(p->pgdir);
-				p->state = UNUSED;
-				p->pid = 0;
-				p->parent = 0;
-				p->name[0] = 0;
-				p->killed = 0;
-				release(&ptable.lock);
-				return pid;
-			}
-		}
+    sleep(p, &ptable.lock);  //DOC: wait-sleep
+  }
 
-		if(!waitProc)
-		{
-			release(&ptable.lock);
-			return -1;
-		}
-
-		if(ptable.proc->killed)
-		{
-			release(&ptable.lock);
-			return -1;
-		}
-
-  		sleep(ptable.proc, &ptable.lock);
-
-	}
 }
 
 struct proc * currproc(void)
