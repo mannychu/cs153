@@ -15,11 +15,12 @@ sys_fork(void)
 int
 sys_exit(void)
 {
-  int status;
+  int *status;
   argptr(0, (char **) &status, 4);
-  exit(status);
-  return 0;  // not reached
+  exit(*status);
+  return 0;  // shouldnt reach
 }
+
 
 int
 sys_wait(void)
@@ -35,7 +36,7 @@ sys_wait(void)
   return wait(status);
 }
 
-//CS153 Edited Code~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//CS153 EDITED CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 int
 sys_waitpid(void)
 {
@@ -49,9 +50,19 @@ sys_waitpid(void)
 	argptr(2, (char**) &opts, 4);
 
 	return waitpid(pid, status, opts);
-	return 0; //should never reach this point
+	return 0; //shouldnt  reach
 }
 
+// CS153 EDITED CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+int
+sys_change_priority(void)
+{
+	int priority;
+
+	argptr(0,(char **)&priority,4);
+	change_priority(priority);
+	return priority;
+}
 int
 sys_kill(void)
 {
@@ -115,15 +126,5 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
-}
-
-int
-sys_change_priority(void)
-{
-	int priority;
-
-	argptr(0,(char **)&priority,4);
-	change_priority(priority);
-	return priority;
 }
 

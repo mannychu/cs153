@@ -19,12 +19,12 @@ int main(){
                 break;
             }
             if(pid < 0)
-                printf(1,"errors occur!\n");
+                printf(1,"FORK ERROR!\n");
         }
         if (pid == 0){
             int j = 0;
             if(getpid() == begin+8){
-                printf(1," pid = %d, get higher priority\n\n",getpid());
+                printf(1,"PID #%d, need higher priority\n\n",getpid());
                 change_priority(33);
             }
             while(j++ < 30000000);
@@ -41,9 +41,9 @@ int main(){
     while(ki >= 0){
         ki = wait(&status);
         if(ki == begin+8)
-            printf(1," [%d] I should be done first\n",ki);
+            printf(1,"Pid #%d should be done first\n",ki);
         else
-            printf(1," [%d] done runing\n",ki);
+            printf(1,"Pid #%d done\n",ki);
     }
     exit(0);
     return 0;

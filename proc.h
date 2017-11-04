@@ -39,9 +39,9 @@ enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
 // Per-process state
 struct proc {
-  int wcount;
-  int priority;		// Priority number of process
-  int status;
+  int wcount;		       // CS153
+  int priority;		       // CS153 Priority number of process
+  int status;			//CS153 EDITED CODE
   struct proc* wpid[20];
   uint sz;                     // Size of process memory (bytes)
   pde_t* pgdir;                // Page table
@@ -58,6 +58,9 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
+  int sleepT;			// time spent sleeping CS153 EDITED CODE 
+  int readyT;			// time spent ready
+  int runT;			// time spent running
 };
 
 // Process memory is laid out contiguously, low addresses first:
