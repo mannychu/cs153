@@ -88,6 +88,8 @@ allocproc(void)
 found:
   p->state = EMBRYO;
   p->pid = nextpid++;
+  // CS153 EDITED CODE~~~~~~~~~~~~~~~~~~~~~~~~~~
+  p->priority = 20; // default value 
 
   release(&ptable.lock);
 
