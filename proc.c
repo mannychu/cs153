@@ -381,6 +381,16 @@ struct proc * currproc(void)
     return p;
 }
 
+
+// CS153 EDITED CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+void
+change_priority(int priority)
+{
+	struct proc * p;
+	p = currproc();	
+	p->priority = priority;
+}
+
 int high_priority(void)
 {
 	int priority_uno = 0;
@@ -395,28 +405,6 @@ int high_priority(void)
 	}
 	return priority_uno;
 }
-
-// CS153 EDITED CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-int
-change_priority(int priority)
-{
-	struct proc * p;
-	p = currproc();
-	// acquire lock
-	acquire(&ptable.lock);
-	//set new priority
-	p->priority = priority;
-	//set state to runnable (i.e. ready)
-	p->state = RUNNABLE;
-
-	//release lock
-	release(&ptable.lock);
-
-	//yield control for top priority 
-	yield();
-	return priority;
-}
-
 
 //PAGEBREAK: 42
 // Per-CPU process scheduler.

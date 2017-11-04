@@ -123,7 +123,7 @@ void            yield(void);
 
 //CS153 Edited Code~~~~~~~~~~~~~~~~~~~~~~~~~~~
 int		waitpid(int, int *, int); 
-int		change_priority(int);
+void		change_priority(int);
 
 // swtch.S
 void            swtch(struct context**, struct context*);
